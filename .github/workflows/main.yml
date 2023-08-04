@@ -1,7 +1,5 @@
 name: main
 
-run-name: ${{ github.actor }} is Tag-release
-
 on:
   push:
     tags:
@@ -29,4 +27,4 @@ jobs:
           git config --global user.email "oiltea@qq.com"
           git add README.md
           git commit -m "Update version in README.md"
-          git push
+          git push origin HEAD:main

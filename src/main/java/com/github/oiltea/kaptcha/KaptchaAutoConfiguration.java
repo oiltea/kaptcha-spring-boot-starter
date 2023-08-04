@@ -22,37 +22,43 @@ import java.util.Objects;
 public class KaptchaAutoConfiguration {
 	
 	@Bean
-	public ServletRegistrationBean<KaptchaServlet> myServlet(KaptchaProperties kaptchaProperties) {
+	public ServletRegistrationBean<KaptchaServlet> myServlet(KaptchaProperties properties) {
 		Map<String, String> initParameters = new HashMap<>();
-		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_KEY, kaptchaProperties.getSessionConfigKey());
-		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_DATE, kaptchaProperties.getSessionConfigDate());
-		initParameters.put(Constants.KAPTCHA_BORDER, kaptchaProperties.getBorder());
-		initParameters.put(Constants.KAPTCHA_BORDER_COLOR, kaptchaProperties.getBorderColor());
-		initParameters.put(Constants.KAPTCHA_BORDER_THICKNESS, kaptchaProperties.getBorderThickness());
-		initParameters.put(Constants.KAPTCHA_NOISE_COLOR, kaptchaProperties.getNoiseColor());
-		initParameters.put(Constants.KAPTCHA_NOISE_IMPL, kaptchaProperties.getNoiseImpl());
-		initParameters.put(Constants.KAPTCHA_OBSCURIFICATOR_IMPL, kaptchaProperties.getObscurificatorImpl());
-		initParameters.put(Constants.KAPTCHA_PRODUCER_IMPL, kaptchaProperties.getProducerImpl());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_IMPL, kaptchaProperties.getTextproducerImpl());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_STRING, kaptchaProperties.getTextproducerCharString());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_LENGTH, kaptchaProperties.getTextproducerCharLength());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_NAMES, kaptchaProperties.getTextproducerFontNames());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_COLOR, kaptchaProperties.getTextproducerFontColor());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE, kaptchaProperties.getTextproducerFontSize());
-		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_SPACE, kaptchaProperties.getTextproducerCharSpace());
-		initParameters.put(Constants.KAPTCHA_WORDRENDERER_IMPL, kaptchaProperties.getWordrendererImpl());
-		initParameters.put(Constants.KAPTCHA_BACKGROUND_IMPL, kaptchaProperties.getBackgroundImpl());
-		initParameters.put(Constants.KAPTCHA_BACKGROUND_CLR_FROM, kaptchaProperties.getBackgroundClrFrom());
-		initParameters.put(Constants.KAPTCHA_BACKGROUND_CLR_TO, kaptchaProperties.getBackgroundClrTo());
-		initParameters.put(Constants.KAPTCHA_IMAGE_WIDTH, kaptchaProperties.getImageWidth());
-		initParameters.put(Constants.KAPTCHA_IMAGE_HEIGHT, kaptchaProperties.getImageHeight());
+		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_KEY, properties.getSessionConfigKey());
+		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_DATE, properties.getSessionConfigDate());
+		initParameters.put(Constants.KAPTCHA_BORDER, properties.getBorder());
+		initParameters.put(Constants.KAPTCHA_BORDER_COLOR, properties.getBorderColor());
+		initParameters.put(Constants.KAPTCHA_BORDER_THICKNESS, properties.getBorderThickness());
+		initParameters.put(Constants.KAPTCHA_NOISE_COLOR, properties.getNoiseColor());
+		initParameters.put(Constants.KAPTCHA_NOISE_IMPL, properties.getNoiseImpl());
+		initParameters.put(Constants.KAPTCHA_OBSCURIFICATOR_IMPL, properties.getObscurificatorImpl());
+		initParameters.put(Constants.KAPTCHA_PRODUCER_IMPL, properties.getProducerImpl());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_IMPL, properties.getTextproducerImpl());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_STRING, properties.getTextproducerCharString());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_LENGTH, properties.getTextproducerCharLength());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_NAMES, properties.getTextproducerFontNames());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_COLOR, properties.getTextproducerFontColor());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_FONT_SIZE, properties.getTextproducerFontSize());
+		initParameters.put(Constants.KAPTCHA_TEXTPRODUCER_CHAR_SPACE, properties.getTextproducerCharSpace());
+		initParameters.put(Constants.KAPTCHA_WORDRENDERER_IMPL, properties.getWordrendererImpl());
+		initParameters.put(Constants.KAPTCHA_BACKGROUND_IMPL, properties.getBackgroundImpl());
+		initParameters.put(Constants.KAPTCHA_BACKGROUND_CLR_FROM, properties.getBackgroundClrFrom());
+		initParameters.put(Constants.KAPTCHA_BACKGROUND_CLR_TO, properties.getBackgroundClrTo());
+		initParameters.put(Constants.KAPTCHA_IMAGE_WIDTH, properties.getImageWidth());
+		initParameters.put(Constants.KAPTCHA_IMAGE_HEIGHT, properties.getImageHeight());
 		
+		// 移除值为 null 的键值对
 		initParameters.entrySet().removeIf(entry -> Objects.isNull(entry.getValue()));
 		
 		ServletRegistrationBean<KaptchaServlet> servletRegistrationBean = new ServletRegistrationBean<>();
 		servletRegistrationBean.setServlet(new KaptchaServlet());
-		servletRegistrationBean.addUrlMappings(kaptchaProperties.getUrlMapping());
+		servletRegistrationBean.addUrlMappings(properties.getUrlMapping());
 		servletRegistrationBean.setInitParameters(initParameters);
 		return servletRegistrationBean;
+	}
+	
+	@Bean
+	public KaptchaManager kaptchaManager(KaptchaProperties properties) {
+		return new KaptchaManager(properties.getSessionConfigKey(), properties.getSessionConfigDate());
 	}
 }

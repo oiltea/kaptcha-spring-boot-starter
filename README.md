@@ -1,6 +1,7 @@
 # Google kaptcha SpringBoot support
 
 [![](https://jitci.com/gh/oiltea/kaptcha-spring-boot-starter/svg)](https://jitci.com/gh/oiltea/kaptcha-spring-boot-starter)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/oiltea/kaptcha-spring-boot-starter?label=latest&logo=github&sort=date)
 
 # 使用方法
 

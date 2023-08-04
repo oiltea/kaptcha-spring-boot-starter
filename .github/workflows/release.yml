@@ -15,7 +15,7 @@ jobs:
 
       - name: Get latest tag
         id: get_tag
-        run: echo "::set-output name=tag::$(git describe --tags)"
+        run: echo "name=tag::$(git describe --tags)" >> $GITHUB_OUTPUT
 
       - name: Update README.md
         run: |

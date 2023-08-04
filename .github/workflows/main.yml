@@ -3,8 +3,9 @@ name: main
 run-name: ${{ github.actor }} is Tag-release
 
 on:
-  label:
-    types: [created, edited]
+  push:
+    tags:
+      - v*
 
 jobs:
   update-version:

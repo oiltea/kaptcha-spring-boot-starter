@@ -2,6 +2,8 @@ package com.github.oiltea.kaptcha;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.servlet.KaptchaServlet;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -18,11 +20,11 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties(KaptchaProperties.class)
+@EnableConfigurationProperties({KaptchaProperties.class, WebMvcProperties.class, ServerProperties.class})
 public class KaptchaAutoConfiguration {
 	
 	@Bean
-	public ServletRegistrationBean<KaptchaServlet> myServlet(KaptchaProperties properties) {
+	public ServletRegistrationBean<KaptchaServlet> myServlet(KaptchaProperties properties, ServerProperties serverProperties, WebMvcProperties webMvcProperties) {
 		Map<String, String> initParameters = new HashMap<>();
 		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_KEY, properties.getSessionConfigKey());
 		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_DATE, properties.getSessionConfigDate());
@@ -50,9 +52,13 @@ public class KaptchaAutoConfiguration {
 		// 移除值为 null 的键值对
 		initParameters.entrySet().removeIf(entry -> Objects.isNull(entry.getValue()));
 		
+		String contextPath = serverProperties.getServlet().getContextPath();
+		String path = webMvcProperties.getServlet().getPath();
+		String urlMapping = contextPath + path + properties.getUrlMapping();
+		
 		ServletRegistrationBean<KaptchaServlet> servletRegistrationBean = new ServletRegistrationBean<>();
 		servletRegistrationBean.setServlet(new KaptchaServlet());
-		servletRegistrationBean.addUrlMappings(properties.getUrlMapping());
+		servletRegistrationBean.addUrlMappings(urlMapping);
 		servletRegistrationBean.setInitParameters(initParameters);
 		return servletRegistrationBean;
 	}

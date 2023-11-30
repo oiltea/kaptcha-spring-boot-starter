@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class KaptchaAutoConfiguration {
 		initParameters.entrySet().removeIf(entry -> Objects.isNull(entry.getValue()));
 		ServletRegistrationBean<KaptchaServlet> servletRegistrationBean = new ServletRegistrationBean<>();
 		servletRegistrationBean.setServlet(new KaptchaServlet());
-		servletRegistrationBean.addUrlMappings(StringUtils.cleanPath(webMvcProperties.getServlet().getPath() + properties.getUrlMapping()));
+		servletRegistrationBean.addUrlMappings((webMvcProperties.getServlet().getPath() + properties.getUrlMapping()).replaceAll("//", "/"));
 		servletRegistrationBean.setInitParameters(initParameters);
 		return servletRegistrationBean;
 	}

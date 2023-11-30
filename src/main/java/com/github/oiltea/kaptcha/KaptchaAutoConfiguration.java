@@ -2,7 +2,6 @@ package com.github.oiltea.kaptcha;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.servlet.KaptchaServlet;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -20,7 +19,7 @@ import java.util.Objects;
  * @since 1.0.0
  */
 @Configuration
-@EnableConfigurationProperties({KaptchaProperties.class, WebMvcProperties.class, ServerProperties.class})
+@EnableConfigurationProperties({KaptchaProperties.class, WebMvcProperties.class})
 public class KaptchaAutoConfiguration {
 	
 	@Bean

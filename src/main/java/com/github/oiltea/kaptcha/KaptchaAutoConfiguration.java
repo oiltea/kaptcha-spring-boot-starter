@@ -24,7 +24,7 @@ import java.util.Objects;
 public class KaptchaAutoConfiguration {
 	
 	@Bean
-	public ServletRegistrationBean<KaptchaServlet> myServlet(KaptchaProperties properties, ServerProperties serverProperties, WebMvcProperties webMvcProperties) {
+	public ServletRegistrationBean<KaptchaServlet> myServlet(KaptchaProperties properties, WebMvcProperties webMvcProperties) {
 		Map<String, String> initParameters = new HashMap<>();
 		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_KEY, properties.getSessionConfigKey());
 		initParameters.put(Constants.KAPTCHA_SESSION_CONFIG_DATE, properties.getSessionConfigDate());
@@ -52,13 +52,9 @@ public class KaptchaAutoConfiguration {
 		// 移除值为 null 的键值对
 		initParameters.entrySet().removeIf(entry -> Objects.isNull(entry.getValue()));
 		
-		String contextPath = serverProperties.getServlet().getContextPath();
-		String path = webMvcProperties.getServlet().getPath();
-		String urlMapping = contextPath + path + properties.getUrlMapping();
-		
 		ServletRegistrationBean<KaptchaServlet> servletRegistrationBean = new ServletRegistrationBean<>();
 		servletRegistrationBean.setServlet(new KaptchaServlet());
-		servletRegistrationBean.addUrlMappings(urlMapping);
+		servletRegistrationBean.addUrlMappings(webMvcProperties.getServlet().getPath() + properties.getUrlMapping());
 		servletRegistrationBean.setInitParameters(initParameters);
 		return servletRegistrationBean;
 	}
